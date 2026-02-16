@@ -1,0 +1,50 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: manager-role
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
+  - create
+  - delete  // 新增：允许 Controller 操作 Pod
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - pods/status
+  verbs:
+  - get  // 新增：允许 Controller 查看 Pod 状态
+- apiGroups:
+  - app.example.com
+  resources:
+  - appservices
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - app.example.com
+  resources:
+  - appservices/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - app.example.com
+  resources:
+  - appservices/status
+  verbs:
+  - get
+  - patch
+  - update

@@ -1,0 +1,9 @@
+apiVersion: app.example.com/v1
+kind: AppService
+metadata:
+  name: demo-appservice
+  namespace: monitoring
+spec:
+  image: nginx:1.25
+  port: 80
+  replicas: 2

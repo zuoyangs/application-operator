@@ -1,0 +1,81 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.20.0
+  name: appservices.app.example.com
+spec:
+  group: app.example.com
+  names:
+    kind: AppService
+    listKind: AppServiceList
+    plural: appservices
+    singular: appservice
+  scope: Namespaced
+  versions:
+  - name: v1
+    schema:
+      openAPIV3Schema:
+        description: AppService is the Schema for the appservices API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: spec defines the desired state of AppService
+            properties:
+              image:
+                description: 业务服务的镜像（必填），比如 nginx:1.25、busybox:latest
+                type: string
+              port:
+                description: 容器暴露的端口（必填），比如 80、8080
+                format: int32
+                maximum: 65535
+                minimum: 1
+                type: integer
+              replicas:
+                default: 1
+                description: 服务的副本数（可选，默认1）
+                format: int32
+                minimum: 1
+                type: integer
+              serviceName:
+                description: 服务名称（可选，默认是 CR 的名称）
+                type: string
+            required:
+            - image
+            - port
+            type: object
+          status:
+            description: status defines the observed state of AppService
+            properties:
+              currentReplicas:
+                description: 当前运行的副本数（由 Controller 维护）
+                format: int32
+                type: integer
+              status:
+                description: 服务状态（Running/Stopped/Error，由 Controller 维护）
+                type: string
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
